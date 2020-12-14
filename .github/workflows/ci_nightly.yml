@@ -1,0 +1,47 @@
+---
+name: CI Nightly
+
+on:
+  schedule:
+    - cron: '0 23 * * *'
+
+
+jobs:
+  test_linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Crystal
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: nightly
+          shards: nightly
+
+      - name: Install system dependencies
+        run: sudo apt-get install libgtk-4-dev gobject-introspection gir1.2-gtk-4.0 libgirepository1.0-dev
+
+      - name: Install dependencies
+        run: make deps
+
+      - name: Run tests
+        run: make build
+
+  # test_macos:
+  #   runs-on: macos-11
+  #   steps:
+  #     - name: Git checkout
+  #       uses: actions/checkout@v2
+
+  #     - name: Setup Crystal
+  #       uses: crystal-lang/install-crystal@v1
+  #       with:
+  #         crystal: nightly
+  #         shards: nightly
+
+  #     - name: Install dependencies
+  #       run: make deps
+
+  #     - name: Run tests
+  #       run: make build

@@ -1,0 +1,85 @@
+---
+en:
+  application:
+    name: SSH Tunnel Manager
+
+  menu:
+    quit: Quit
+    about: About
+
+  window:
+    host:
+      new: New Host
+      edit: "Edit Host - %{host}"
+      delete: "Remove Host - %{host}"
+    tunnel:
+      new: New Tunnel
+      edit: "Edit Tunnel - %{tunnel}"
+      delete: "Remove Tunnel - %{tunnel}"
+
+  view:
+    host:
+      state: State
+      uuid: UUID
+      name: Name
+      user: User
+      host: Host
+      port: Port
+    tunnel:
+      uuid: UUID
+      name: Name
+      type: Type
+      type_local: Local
+      type_remote: Remote
+      local_host: Local Host
+      local_port: Local Port
+      remote_host: Remote Host
+      remote_port: Remote Port
+      auto_start: Auto Start
+      started: Started?
+
+  tooltip:
+    host:
+      new: Add Host
+      edit: Edit Host
+      delete: Remove Host
+    tunnel:
+      new: Add Tunnel
+      edit: Edit Tunnel
+      delete: Remove Tunnel
+      start: Start Tunnel
+      stop: Stop Tunnel
+
+  form:
+    host:
+      name: Name
+      user: User
+      host: Host
+      port: Port
+      identity_file: Identity File
+    tunnel:
+      name: Name
+      type: Type
+      type_local: Local
+      type_remote: Remote
+      local_host: Local Host
+      local_port: Local Port
+      remote_host: Remote Host
+      remote_port: Remote Port
+      auto_start: Auto Start
+
+  errors:
+    type:
+      required: "Field is required"
+      invalid: "Invalid value"
+
+  label:
+    confirm: Are you sure?
+
+  button:
+    new: Add
+    edit: Edit
+    delete: Remove
+    cancel: Cancel
+    submit: Save
+    reset: Reset

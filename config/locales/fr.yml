@@ -1,0 +1,85 @@
+---
+fr:
+  application:
+    name: SSH Tunnel Manager
+
+  menu:
+    quit: Quitter
+    about: A propos
+
+  window:
+    host:
+      new: Nouvel hôte
+      edit: "Modifier l'hôte - %{host}"
+      delete: "Supprimer l'hôte - %{host}"
+    tunnel:
+      new: Nouveau tunnel
+      edit: "Modifier le tunnel - %{tunnel}"
+      delete: "Supprimer le tunnel - %{tunnel}"
+
+  view:
+    host:
+      state: Etat
+      uuid: UUID
+      name: Nom
+      user: Utilisateur
+      host: Hôte
+      port: Port
+    tunnel:
+      uuid: UUID
+      name: Nom
+      type: Type
+      type_local: Local
+      type_remote: Distant
+      local_host: Hôte local
+      local_port: Port local
+      remote_host: Hôte distant
+      remote_port: Port distant
+      auto_start: Démarrage auto
+      started: Démarré?
+
+  tooltip:
+    host:
+      new: Ajouter un hôte
+      edit: Modifier l'hôte
+      delete: Supprimer l'hôte
+    tunnel:
+      new: Ajouter un tunnel
+      edit: Modifier le tunnel
+      delete: Supprimer le tunnel
+      start: Démarrer le tunnel
+      stop: Arrêter le tunnel
+
+  form:
+    host:
+      name: Nom
+      user: Utilisateur
+      host: Hôte
+      port: Port
+      identity_file: Clé SSH
+    tunnel:
+      name: Nom
+      type: Type
+      type_local: Local
+      type_remote: Distant
+      local_host: Hôte local
+      local_port: Port local
+      remote_host: Hôte distant
+      remote_port: Port distant
+      auto_start: Démarrage auto
+
+  errors:
+    type:
+      required: "Le champs est requis"
+      invalid: "La valeur est invalide"
+
+  label:
+    confirm: Etes vous sûr?
+
+  button:
+    new: Ajouter
+    edit: Modifier
+    delete: Supprimer
+    cancel: Annuler
+    submit: Enregistrer
+    reset: Reset

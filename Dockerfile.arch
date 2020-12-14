@@ -1,0 +1,131 @@
+###########
+# CRYSTAL #
+###########
+
+# Fetch base image
+FROM archlinux:latest AS crystal
+
+# Make bash commands more robust
+# See: https://github.com/hadolint/hadolint/wiki/DL4006
+# See: https://kvz.io/bash-best-practices.html
+SHELL ["/bin/bash", "-o", "errexit", "-o", "pipefail", "-c"]
+
+# Install build dependencies
+RUN \
+  pacman -Syu --noconfirm \
+    # asdf dependencies
+    git base-devel unzip curl \
+    # crystal dependencies
+    openssl libxml2 libyaml gmp zlib pcre libevent \
+    # ssh-tunnel dependencies
+    gtk4 gobject-introspection gobject-introspection-runtime \
+    # tini dependencies
+    cmake
+
+# Install asdf
+RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+
+# Install asdf loader
+COPY docker/asdf.sh /etc/profile.d/
+
+# Setup asdf
+ENV PATH /root/.asdf/shims:/root/.asdf/bin:$PATH
+
+# Install Crystal
+RUN \
+  asdf plugin add crystal && \
+  asdf install crystal 1.6.0 && \
+  asdf global crystal 1.6.0
+
+#########
+# BUILD #
+#########
+
+# Build ssh-tunnel with Crystal upstream image
+# Use alpine variant to build static binary
+FROM crystal AS binary-file
+
+# Fetch platforms variables from ARGS
+ARG TARGETPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT
+
+# Export them to build binary files with the right name: ssh-tunnel-linux-amd64
+ENV \
+  TARGETPLATFORM=${TARGETPLATFORM} \
+  TARGETOS=${TARGETOS} \
+  TARGETARCH=${TARGETARCH} \
+  TARGETVARIANT=${TARGETVARIANT}
+
+# Set build environment
+WORKDIR /build
+COPY shard.yml shard.lock /build/
+COPY Makefile.release /build/Makefile
+COPY src/ /build/src/
+COPY config/ /build/config/
+COPY resources/ /build/resources/
+RUN mkdir /build/bin
+
+# Build the binary
+RUN make release
+
+#########
+# BUILD2 #
+#########
+
+# Add user
+RUN groupadd -g 65535 nonroot
+RUN useradd -d /home/nonroot -s /bin/bash -m nonroot -u 65535 -g 65535
+
+# Set runtime environment
+USER nonroot
+ENV USER nonroot
+ENV HOME /home/nonroot
+WORKDIR /home/nonroot
+
+RUN \
+  curl https://aur.archlinux.org/cgit/aur.git/snapshot/tini.tar.gz > /tmp/tini.tar.gz && \
+  tar xvf /tmp/tini.tar.gz -C /tmp && \
+  cd /tmp/tini && \
+  makepkg && ls -hal .
+
+###########
+# RUNTIME #
+###########
+
+# Build non distroless images :/
+FROM archlinux:latest AS docker-image
+
+# Install runtime dependencies
+RUN \
+  pacman -Syu --noconfirm \
+    # ssh-tunnel dependencies
+    libyaml pcre gtk4 openssh
+
+# Fetch platforms variables from ARGS
+ARG TARGETOS
+ARG TARGETARCH
+
+# Grab ssh-tunnel binary from **binary-file** step and inject it in the final image
+COPY --from=binary-file /build/bin/ssh-tunnel-${TARGETOS}-${TARGETARCH} /opt/ssh-tunnel/bin/ssh-tunnel
+COPY --from=binary-file /build/config/    /opt/ssh-tunnel/config/
+COPY --from=binary-file /build/resources/ /opt/ssh-tunnel/resources/
+
+# Install tini
+COPY --from=binary-file /tmp/tini/tini-0.18.0-1-x86_64.pkg.tar.zst /tmp/
+RUN pacman -U --noconfirm /tmp/tini-0.18.0-1-x86_64.pkg.tar.zst
+
+# Add user
+RUN groupadd -g 65535 nonroot
+RUN useradd -d /home/nonroot -s /bin/bash -m nonroot -u 65535 -g 65535
+
+# Setup user home
+RUN mkdir -p /home/nonroot && chown -R nonroot.nonroot /home/nonroot
+
+# Set runtime environment
+USER nonroot
+ENV USER nonroot
+ENV HOME /home/nonroot
+WORKDIR /opt/ssh-tunnel
+ENTRYPOINT ["tini", "-w", "--", "/opt/ssh-tunnel/bin/ssh-tunnel"]

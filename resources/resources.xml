@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/jbox-web/ssh-tunnel">
+    <file preprocess="xml-stripblanks">resources/ui/application_window.ui</file>
+    <file preprocess="xml-stripblanks">resources/ui/hosts/new_window.ui</file>
+    <file preprocess="xml-stripblanks">resources/ui/hosts/edit_window.ui</file>
+    <file preprocess="xml-stripblanks">resources/ui/hosts/delete_window.ui</file>
+    <file preprocess="xml-stripblanks">resources/ui/tunnels/new_window.ui</file>
+    <file preprocess="xml-stripblanks">resources/ui/tunnels/edit_window.ui</file>
+    <file preprocess="xml-stripblanks">resources/ui/tunnels/delete_window.ui</file>
+  </gresource>
+</gresources>

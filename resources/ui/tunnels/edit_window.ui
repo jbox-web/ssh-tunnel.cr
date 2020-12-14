@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.10.3 -->
+<interface>
+  <requires lib="gtk" version="4.6"/>
+  <template class="SSHTunnel-UI-Windows-Tunnels-EditWindow" parent="GtkWindow">
+    <property name="modal">True</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkGrid">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="label.tunnel.name">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Name</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row">0</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="input.tunnel.name">
+                <property name="hexpand">True</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="column-span">1</property>
+                  <property name="row">0</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="error.tunnel.name">
+                <property name="margin-end">10</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="column-span">1</property>
+                  <property name="row">0</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="input.tunnel.type">
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="column-span">1</property>
+                  <property name="row">1</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label.tunnel.type">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Type</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row">1</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="error.tunnel.type">
+                <property name="margin-end">10</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="column-span">1</property>
+                  <property name="row">1</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label.tunnel.local_host">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Local Host</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row">2</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="input.tunnel.local_host">
+                <property name="hexpand">True</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="column-span">1</property>
+                  <property name="row">2</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="error.tunnel.local_host">
+                <property name="margin-end">10</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="column-span">1</property>
+                  <property name="row">2</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label.tunnel.local_port">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Local Port</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row">3</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="input.tunnel.local_port">
+                <property name="hexpand">True</property>
+                <property name="input-purpose">digits</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="column-span">1</property>
+                  <property name="row">3</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="error.tunnel.local_port">
+                <property name="margin-end">10</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="column-span">1</property>
+                  <property name="row">3</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label.tunnel.remote_host">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Remote Host</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row">4</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="input.tunnel.remote_host">
+                <property name="hexpand">True</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="column-span">1</property>
+                  <property name="row">4</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="error.tunnel.remote_host">
+                <property name="margin-end">10</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="column-span">1</property>
+                  <property name="row">4</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label.tunnel.remote_port">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Remote Port</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row">5</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="input.tunnel.remote_port">
+                <property name="hexpand">True</property>
+                <property name="input-purpose">digits</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="column-span">1</property>
+                  <property name="row">5</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="error.tunnel.remote_port">
+                <property name="margin-end">10</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="column-span">1</property>
+                  <property name="row">5</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label.tunnel.auto_start">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Autostart</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">3</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row">6</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkActionBar">
+            <child>
+              <object class="GtkButton" id="button.cancel">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="valign">baseline</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button.submit">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">gtk-apply</property>
+                <property name="valign">baseline</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

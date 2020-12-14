@@ -1,0 +1,32 @@
+name: ssh-tunnel
+
+version: 0.1.0
+
+crystal: 1.6.0
+
+license: MIT
+
+authors:
+  - Nicolas Rodriguez <nico@nicoladmin.fr>
+
+targets:
+  ssh-tunnel:
+    main: src/ssh-tunnel.cr
+
+dependencies:
+  admiral:
+    github: jwaldrip/admiral.cr
+  crystal-env:
+    github: crystal-lang/crystal-env
+    branch: master
+  gtk4:
+    github: hugopl/gtk4.cr
+  i18n:
+    github: crystal-i18n/i18n
+  validator:
+    github: nicolab/crystal-validator
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    version: ~> 1.0.0

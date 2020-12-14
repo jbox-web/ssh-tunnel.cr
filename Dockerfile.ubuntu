@@ -1,0 +1,116 @@
+###########
+# CRYSTAL #
+###########
+
+# Fetch base image
+FROM ubuntu:22.04 AS crystal
+
+# Be sure to run in noninteractive mode
+# See: https://www.debian.org/releases/buster/amd64/ch05s03.fr.html#installer-args
+ENV DEBIAN_FRONTEND noninteractive
+
+# Disable initramfs update during packages installation
+# See: https://manpages.debian.org/buster/initramfs-tools-core/initramfs-tools.7.en.html#KERNEL_HOOKS
+ENV INITRD No
+
+# Make bash commands more robust
+# See: https://github.com/hadolint/hadolint/wiki/DL4006
+# See: https://kvz.io/bash-best-practices.html
+SHELL ["/bin/bash", "-o", "errexit", "-o", "pipefail", "-c"]
+
+# Install package installer
+COPY docker/foo-install-package /usr/local/bin/
+
+RUN \
+  # Install dependencies
+  foo-install-package \
+    # asdf dependencies
+    git build-essential unzip curl \
+    # crystal dependencies
+    libssl-dev libxml2-dev libyaml-dev libgmp-dev zlib1g-dev libpcre3-dev libevent-dev \
+    # ssh-tunnel dependencies
+    libgtk-4-dev gobject-introspection gir1.2-gtk-4.0 libgirepository1.0-dev libxml2-utils
+
+# Install asdf
+RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+
+# Install asdf loader
+COPY docker/asdf.sh /etc/profile.d/
+
+# Setup asdf
+ENV PATH /root/.asdf/shims:/root/.asdf/bin:$PATH
+
+# Install Crystal
+RUN \
+  asdf plugin add crystal && \
+  asdf install crystal 1.6.0 && \
+  asdf global crystal 1.6.0
+
+#########
+# BUILD #
+#########
+
+# Build ssh-tunnel with Crystal upstream image
+# Use alpine variant to build static binary
+FROM crystal AS binary-file
+
+# Fetch platforms variables from ARGS
+ARG TARGETPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT
+
+# Export them to build binary files with the right name: ssh-tunnel-linux-amd64
+ENV \
+  TARGETPLATFORM=${TARGETPLATFORM} \
+  TARGETOS=${TARGETOS} \
+  TARGETARCH=${TARGETARCH} \
+  TARGETVARIANT=${TARGETVARIANT}
+
+# Set build environment
+WORKDIR /build
+COPY shard.yml shard.lock /build/
+COPY Makefile.release /build/Makefile
+COPY src/ /build/src/
+COPY config/ /build/config/
+COPY resources/ /build/resources/
+RUN mkdir /build/bin
+
+# Build the binary
+RUN make release
+
+###########
+# RUNTIME #
+###########
+
+# Build non distroless images :/
+FROM ubuntu:22.04 AS docker-image
+
+# Install package installer
+COPY docker/foo-install-package /usr/local/bin/
+
+# Install runtime dependencies
+RUN foo-install-package tini xserver-xorg-video-intel mesa-utils dbus-x11 libgtk-4-1 libyaml-0-2 libevent-2.1-7 locales
+
+# Fetch platforms variables from ARGS
+ARG TARGETOS
+ARG TARGETARCH
+
+# Grab ssh-tunnel binary from **binary-file** step and inject it in the final image
+COPY --from=binary-file /build/bin/ssh-tunnel-${TARGETOS}-${TARGETARCH} /opt/ssh-tunnel/bin/ssh-tunnel
+COPY --from=binary-file /build/config/    /opt/ssh-tunnel/config/
+COPY --from=binary-file /build/resources/ /opt/ssh-tunnel/resources/
+
+# Add user
+RUN groupadd -g 65535 nonroot
+RUN useradd -d /home/nonroot -s /bin/bash -m nonroot -u 65535 -g 65535
+
+# Setup user home
+RUN mkdir -p /home/nonroot && chown -R nonroot.nonroot /home/nonroot
+
+# Set runtime environment
+USER nonroot
+ENV USER nonroot
+ENV HOME /home/nonroot
+WORKDIR /opt/ssh-tunnel
+ENTRYPOINT ["tini", "-w", "--", "/opt/ssh-tunnel/bin/ssh-tunnel"]

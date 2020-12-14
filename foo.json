@@ -1,0 +1,64 @@
+{
+  "hosts": [
+    {
+      "uuid": "b3d90038-0e84-45ee-924f-b095f0f3726b",
+      "name": "foo",
+      "user": "root",
+      "host": "foo",
+      "port": 22,
+      "identity_file": null,
+      "tunnels": [
+        {
+          "uuid": "3cddec8e-5f19-461e-9054-e2abdc3d18a1",
+          "name": "mysql",
+          "type": "local",
+          "local_host": "127.0.0.1",
+          "local_port": 5041,
+          "remote_host": "127.0.0.1",
+          "remote_port": 3306,
+          "auto_start": null
+        },
+        {
+          "uuid": "1a3a70b8-5ca7-41c2-85a1-43d837ef30eb",
+          "name": "postgres",
+          "type": "local",
+          "local_host": "127.0.0.1",
+          "local_port": 5042,
+          "remote_host": "127.0.0.1",
+          "remote_port": 5432,
+          "auto_start": null
+        }
+      ]
+    },
+    {
+      "uuid": "096f459d-3dc7-40fe-8b0e-5659fc1b93ea",
+      "name": "bar",
+      "user": "root",
+      "host": "bar",
+      "port": 22,
+      "identity_file": null,
+      "tunnels": [
+        {
+          "uuid": "fb99ab60-4364-4581-9000-542cf8f95a87",
+          "name": "mysql",
+          "type": "local",
+          "local_host": "127.0.0.1",
+          "local_port": 5041,
+          "remote_host": "127.0.0.1",
+          "remote_port": 3306,
+          "auto_start": null
+        },
+        {
+          "uuid": "bfd8cb50-ec76-43e5-b0ab-0f73a9bec7ae",
+          "name": "postgres",
+          "type": "local",
+          "local_host": "127.0.0.1",
+          "local_port": 5042,
+          "remote_host": "127.0.0.1",
+          "remote_port": 5432,
+          "auto_start": null
+        }
+      ]
+    }
+  ]
+}

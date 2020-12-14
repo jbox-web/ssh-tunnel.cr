@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# See: https://kvz.io/bash-best-practices.html
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# Check that current user is root
+if [ ! "${UID}" = 0 ]; then
+  echo "ERROR: foo-install-package must be called as root."
+  echo "ERROR: Add 'USER root' in your Dockerfile before calling foo-install-package."
+  echo "ERROR: Don't forget to switch back to 'nonroot' user after having installed packages."
+  exit 1
+fi
+
+# Get packages to install
+packages="${@}"
+
+echo -e "foo-install-package: installing packages '${packages}'\n"
+
+# Fetch Debian updates
+apt-get update
+
+# Install dependencies
+apt-get install -y ${packages}
+
+# Cleanup image
+apt-get -y --purge autoremove
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+find /var/log/ -type f -delete

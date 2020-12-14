@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+DOCKER_IMAGE_NAME="ssh-tunnel-dev-multi:latest"
+DOCKER_CONTAINER_NAME=ssh-tunnel
+
+function usage() {
+  echo "Usage:"
+  echo "  ssh-tunnel <COMMAND>"
+  echo "  ssh-tunnel -h | --help | help | ?"
+  echo ""
+  echo "SUBCOMMAND:"
+  echo "  * start  # Démarre le container"
+  echo "  * stop   # Stop le container"
+  echo ""
+  exit 1
+}
+
+function generate_docker_passwd() {
+  docker run --entrypoint bash ${DOCKER_IMAGE_NAME} -c 'cat /etc/passwd' > /tmp/docker_passwd
+  echo "${USER}:x:$(id -u):$(id -u)::/home/${USER}:/bin/bash" >> /tmp/docker_passwd
+}
+
+function start_container() {
+  args=()
+  args+=( --env DISPLAY=${DISPLAY} )
+  args+=( --env USER=${USER} )
+  args+=( --env LANG=${LANG} )
+  args+=( --env GDM_LANG=${GDM_LANG} )
+  args+=( --env LIBGL_DEBUG=verbose )
+  args+=( --env SSH_AUTH_SOCK=/ssh-agent )
+  args+=( --volume /etc/machine-id:/etc/machine-id)
+  args+=( --volume /tmp/.X11-unix:/tmp/.X11-unix )
+  args+=( --volume /run/user/$(id -u)/at-spi:/run/user/$(id -u)/at-spi )
+  args+=( --volume ${HOME}:${HOME} )
+  args+=( --volume /tmp/docker_passwd:/etc/passwd )
+  args+=( --volume $(readlink -f ${SSH_AUTH_SOCK}):/ssh-agent )
+  args+=( --user $(id -u) )
+  args+=( --net host )
+  args+=( --device /dev/dri/card0 )
+  args+=( --tty )
+  args+=( --rm )
+
+  # args+=( --interactive )
+  # args+=( --entrypoint bash )
+
+  docker run ${args[@]} ${DOCKER_IMAGE_NAME} --config ${HOME}/.config/ssh-tunnel/config.json
+}
+
+function stop_container() {
+  docker stop ${DOCKER_CONTAINER_NAME}
+}
+
+function build_container_image() {
+  docker build . -t ssh-tunnel:latest
+}
+
+case "${1}" in
+  start)
+    generate_docker_passwd
+    start_container
+  ;;
+
+  stop)
+    stop_container
+  ;;
+
+  build)
+    build_container_image
+  ;;
+
+  -h|--help|help|?)
+    usage
+  ;;
+
+  *)
+    usage
+  ;;
+esac
